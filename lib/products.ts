@@ -7,9 +7,9 @@ export interface PizzaSizeOption {
 }
 
 export const pizzaSizes: PizzaSizeOption[] = [
-  { id: 'mini', label: 'Mini', price: 2500 },
-  { id: 'media', label: 'Média', price: 7000 },
-  { id: 'familiar', label: 'Familiar', price: 9000 },
+  { id: 'mini', label: 'Mini', price: 3000 },
+  { id: 'media', label: 'Média', price: 7500 },
+  { id: 'familiar', label: 'Familiar', price: 12000 },
 ]
 
 export interface Product {
@@ -30,40 +30,22 @@ export interface Product {
 
 export const products: Product[] = [
   {
-    id: 'marguerita',
-    name: 'Marguerita',
-    description: 'A clássica italiana com ingredientes frescos e saborosos.',
-    ingredients: ['Queijo', 'Mozzarella', 'Tomate', 'Manjericão', 'Orégano'],
-    image: '/images/pizza1.jpg',
-    category: 'classica',
-    hasSizes: true,
-  },
-  {
-    id: 'havaiana',
-    name: 'Havaiana',
-    description: 'O sabor tropical com a combinação perfeita de doce e salgado.',
-    ingredients: ['Queijo', 'Mozzarella', 'Fiambre', 'Ananás', 'Orégano'],
-    image: '/images/pizza7.jpg',
-    category: 'classica',
-    hasSizes: true,
-  },
-  {
-    id: 'bolonesa',
-    name: 'Bolonesa',
-    description: 'Recheio generoso de carne com toque defumado.',
-    ingredients: ['Queijo', 'Mozzarella', 'Chouriço', 'Carne', 'Bacon', 'Cebola', 'Pimenta', 'Orégano'],
-    image: '/images/pizza5.jpg',
-    category: 'classica',
-    hasSizes: true,
-  },
-  {
     id: 'frango-picante',
     name: 'Frango Picante',
     description: 'Para os amantes de sabores intensos e picantes.',
     ingredients: ['Queijo', 'Mozzarella', 'Frango Picante', 'Cebola', 'Milho', 'Pimenta', 'Azeitonas', 'Orégano'],
-    image: '/images/pizza2.jpg',
+    image: '/images/pizza1.jpg',
     category: 'classica',
     badge: { text: 'Picante', type: 'picante' },
+    hasSizes: true,
+  },
+  {
+    id: 'Calabresa',
+    name: 'Calabresa',
+    description: 'A combinação clássica de calabresa e queijo, perfeita para qualquer ocasião.',
+    ingredients: ['Queijo', 'Mozzarella', 'Linguiça', 'Cebola', 'Orégano'],
+    image: '/images/pizza2.jpg',
+    category: 'classica',
     hasSizes: true,
   },
   {
@@ -87,11 +69,11 @@ export const products: Product[] = [
     hasSizes: true,
   },
   {
-    id: 'frango-bbq',
-    name: 'Frango BBQ',
-    description: 'Frango suculento com molho barbecue defumado.',
-    ingredients: ['Queijo', 'Mozzarella', 'Frango', 'Cebola', 'Orégãos', 'Pimenta', 'Orégano'],
-    image: '/images/pizza8.jpg',
+    id: 'bolonesa',
+    name: 'Bolonesa',
+    description: 'Recheio generoso de carne com toque defumado.',
+    ingredients: ['Queijo', 'Mozzarella', 'Chouriço', 'Carne', 'Bacon', 'Cebola', 'Pimenta', 'Orégano'],
+    image: '/images/pizza5.jpg',
     category: 'classica',
     hasSizes: true,
   },
@@ -107,6 +89,24 @@ export const products: Product[] = [
     calzoneOptions: ['Frango', 'Vegetariana', 'Bolonesa'],
   },
   {
+    id: 'havaiana',
+    name: 'Havaiana',
+    description: 'O sabor tropical com a combinação perfeita de doce e salgado.',
+    ingredients: ['Queijo', 'Mozzarella', 'Fiambre', 'Ananás', 'Orégano'],
+    image: '/images/pizza7.jpg',
+    category: 'classica',
+    hasSizes: true,
+  },
+  {
+    id: 'frango-bbq',
+    name: 'Frango BBQ',
+    description: 'Frango suculento com molho barbecue defumado.',
+    ingredients: ['Queijo', 'Mozzarella', 'Frango', 'Cebola', 'Orégãos', 'Pimenta', 'Orégano'],
+    image: '/images/pizza8.jpg',
+    category: 'classica',
+    hasSizes: true,
+  },
+  {
     id: 'chocolate',
     name: 'Chocolate com Banana',
     description: 'Deliciosa pizza doce com chocolate derretido e banana fresca.',
@@ -115,7 +115,7 @@ export const products: Product[] = [
     category: 'doce',
     badge: { text: 'Doce', type: 'doce' },
     hasSizes: false,
-    fixedPrice: 5000,
+    fixedPrice: 15000,
   },
 ]
 
