@@ -86,35 +86,7 @@ export default function CardapioPage() {
         )}
       </section>
 
-      {/* Info Section */}
-      <section className="max-w-4xl mx-auto px-6 mt-16 text-center">
-        <div className="bg-[#f7f4ef] rounded-2xl p-8 md:p-12">
-          <h2 className="font-display text-2xl md:text-3xl font-bold mb-4">
-            Cupons de Desconto
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            Utilize os códigos abaixo para obter descontos no seu pedido!
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white rounded-xl p-4 border border-gray-100">
-              <span className="font-mono font-bold text-primary">DESCONTO10</span>
-              <p className="text-sm text-muted-foreground mt-1">10% de desconto</p>
-            </div>
-            <div className="bg-white rounded-xl p-4 border border-gray-100">
-              <span className="font-mono font-bold text-primary">DESCONTO15</span>
-              <p className="text-sm text-muted-foreground mt-1">15% de desconto</p>
-            </div>
-            <div className="bg-white rounded-xl p-4 border border-gray-100">
-              <span className="font-mono font-bold text-primary">PRIMEIRACOMPRA</span>
-              <p className="text-sm text-muted-foreground mt-1">20% na 1ª compra</p>
-            </div>
-            <div className="bg-white rounded-xl p-4 border border-gray-100">
-              <span className="font-mono font-bold text-primary">FRETEGRATIS</span>
-              <p className="text-sm text-muted-foreground mt-1">Entrega grátis</p>
-            </div>
-          </div>
-        </div>
-      </section>
+
     </div>
   )
 }
