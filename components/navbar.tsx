@@ -19,7 +19,7 @@ const navLinks = [
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [session, setSession] = useState<Session | null>(null)
+  const [session, setSession] = useState<{user: any; session: any} | null>(null)
   const [loading, setLoading] = useState(true)
   const pathname = usePathname()
   const { openCart, getTotalItems } = useCart()
@@ -32,7 +32,9 @@ export function Navbar() {
     const getSession = async () => {
       try {
         const { data } = await authClient.getSession()
-        setSession(data?.session || null)
+        if (data) {
+          setSession(data)
+        }
       } catch (error) {
         // Silently fail on session fetch errors
       } finally {
@@ -120,11 +122,11 @@ export function Navbar() {
           {/* Auth Buttons */}
           {!loading && (
             <>
-              {session ? (
+              {session?.user ? (
                 <>
                   <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10">
                     <User className="w-4 h-4 text-white" />
-                    <span className="text-sm text-white/90">{session.user.name || session.user.email}</span>
+                    <span className="text-sm text-white/90">{session.user?.name || session.user?.email}</span>
                   </div>
                   <button
                     onClick={handleLogout}
