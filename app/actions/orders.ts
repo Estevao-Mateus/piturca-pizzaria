@@ -1,58 +1,73 @@
 'use server'
 
 import { auth } from '@/lib/auth'
+import { sql } from 'drizzle-orm'
 import { db } from '@/lib/db'
-// Replace `items` with your table from lib/db/schema.ts.
-// import { items } from "@/lib/db/schema"
-import { and, desc, eq } from 'drizzle-orm'
 import { headers } from 'next/headers'
 import { revalidatePath } from 'next/cache'
+import { nanoid } from 'nanoid'
 
-/**
- * Resolve the current user id from the Better Auth session.
- * Every server action that touches user data MUST go through this helper
- * — it is the only thing standing between one user and another's rows.
- */
 async function getUserId() {
   const session = await auth.api.getSession({ headers: await headers() })
   if (!session?.user) throw new Error('Unauthorized')
   return session.user.id
 }
 
-// Template — replace `items` and the field names with your own table.
-//
-// export async function getItems() {
-//   const userId = await getUserId()
-//   return db
-//     .select()
-//     .from(items)
-//     .where(eq(items.userId, userId))
-//     .orderBy(desc(items.createdAt))
-// }
-//
-// export async function createItem(title: string) {
-//   const userId = await getUserId()
-//   const trimmed = title.trim()
-//   if (!trimmed) return
-//   await db.insert(items).values({ userId, title: trimmed })
-//   revalidatePath("/")
-// }
-//
-// export async function updateItem(id: number, fields: { completed?: boolean }) {
-//   const userId = await getUserId()
-//   await db
-//     .update(items)
-//     .set(fields)
-//     .where(and(eq(items.id, id), eq(items.userId, userId)))
-//   revalidatePath("/")
-// }
-//
-// export async function deleteItem(id: number) {
-//   const userId = await getUserId()
-//   await db
-//     .delete(items)
-//     .where(and(eq(items.id, id), eq(items.userId, userId)))
-//   revalidatePath("/")
-// }
+interface OrderItem {
+  id: string
+  name: string
+  price: number
+  quantity: number
+  size?: string
+  calzoneOption?: string
+}
 
-export {}
+interface CreateOrderInput {
+  items: OrderItem[]
+  subtotal: number
+  deliveryFee: number
+  total: number
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  address: string
+  notes?: string
+}
+
+export async function createOrder(input: CreateOrderInput) {
+  const userId = await getUserId()
+  const orderId = nanoid()
+  
+  await db.execute(
+    sql`INSERT INTO "orders" 
+    (id, "userId", items, subtotal, "deliveryFee", total, status, "customerName", "customerEmail", "customerPhone", address, notes, "createdAt", "updatedAt")
+    VALUES (${orderId}, ${userId}, ${JSON.stringify(input.items)}, ${input.subtotal}, ${input.deliveryFee}, ${input.total}, 'pending', ${input.customerName}, ${input.customerEmail}, ${input.customerPhone}, ${input.address}, ${input.notes || null}, NOW(), NOW())`
+  )
+  
+  revalidatePath('/pedidos')
+  return { success: true, orderId }
+}
+
+export async function getOrders() {
+  const userId = await getUserId()
+  
+  const orders = await db.execute(
+    sql`SELECT * FROM "orders" WHERE "userId" = ${userId} ORDER BY "createdAt" DESC`
+  )
+  
+  return orders.rows || []
+}
+
+export async function getOrderById(orderId: string) {
+  const userId = await getUserId()
+  
+  const orders = await db.execute(
+    sql`SELECT * FROM "orders" WHERE id = ${orderId} AND "userId" = ${userId}`
+  )
+  
+  if (!orders.rows || orders.rows.length === 0) {
+    throw new Error('Pedido não encontrado')
+  }
+  
+  return orders.rows[0]
+}

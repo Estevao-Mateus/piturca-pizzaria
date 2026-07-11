@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { ShoppingCart, Menu, X, LogOut, User } from 'lucide-react'
 import { useCart } from '@/context/cart-context'
 import { cn } from '@/lib/utils'
@@ -22,7 +22,6 @@ export function Navbar() {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
   const pathname = usePathname()
-  const router = useRouter()
   const { openCart, getTotalItems } = useCart()
   const totalItems = getTotalItems()
 
@@ -51,8 +50,7 @@ export function Navbar() {
   const handleLogout = async () => {
     await authClient.signOut()
     setSession(null)
-    router.push('/')
-    router.refresh()
+    window.location.href = '/'
   }
 
   useEffect(() => {

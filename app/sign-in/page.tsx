@@ -1,9 +1,7 @@
-import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
+import { auth } from '@/lib/auth'
 import { AuthForm } from '@/components/auth-form'
 
 export const metadata: Metadata = {
