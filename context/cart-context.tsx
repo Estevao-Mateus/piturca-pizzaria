@@ -15,15 +15,9 @@ export interface CartItem {
   calzoneOption?: string
 }
 
-interface CouponData {
-  code: string
-  discount: number | 'frete'
-}
-
 interface CartContextType {
   items: CartItem[]
   isOpen: boolean
-  coupon: CouponData | null
   deliveryFee: number
   addItem: (item: Omit<CartItem, 'quantity'>) => void
   removeItem: (id: string, size?: PizzaSize, calzoneOption?: string) => void
@@ -31,22 +25,12 @@ interface CartContextType {
   clearCart: () => void
   openCart: () => void
   closeCart: () => void
-  applyCoupon: (code: string) => boolean
-  removeCoupon: () => void
   getSubtotal: () => number
-  getDiscount: () => number
   getTotal: () => number
   getTotalItems: () => number
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
-
-const COUPONS: Record<string, number | 'frete'> = {
-  "DESCONTO10": 0.10,
-  "DESCONTO15": 0.15,
-  "PRIMEIRACOMPRA": 0.20,
-  "FRETEGRATIS": "frete"
-}
 
 const STORAGE_KEY = 'piturca_carrinho'
 const DELIVERY_FEE = 500
@@ -54,7 +38,6 @@ const DELIVERY_FEE = 500
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
   const [isOpen, setIsOpen] = useState(false)
-  const [coupon, setCoupon] = useState<CouponData | null>(null)
   const [isHydrated, setIsHydrated] = useState(false)
 
   // Load cart from localStorage on mount
@@ -133,40 +116,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = useCallback(() => {
     setItems([])
-    setCoupon(null)
   }, [])
 
   const openCart = useCallback(() => setIsOpen(true), [])
   const closeCart = useCallback(() => setIsOpen(false), [])
 
-  const applyCoupon = useCallback((code: string): boolean => {
-    const upperCode = code.toUpperCase()
-    if (COUPONS[upperCode]) {
-      setCoupon({ code: upperCode, discount: COUPONS[upperCode] })
-      return true
-    }
-    return false
-  }, [])
-
-  const removeCoupon = useCallback(() => {
-    setCoupon(null)
-  }, [])
-
   const getSubtotal = useCallback(() => {
     return items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   }, [items])
 
-  const getDiscount = useCallback(() => {
-    if (!coupon || coupon.discount === 'frete') return 0
-    return getSubtotal() * coupon.discount
-  }, [coupon, getSubtotal])
-
   const getTotal = useCallback(() => {
     const subtotal = getSubtotal()
-    const discount = getDiscount()
-    const delivery = coupon?.discount === 'frete' ? 0 : DELIVERY_FEE
-    return subtotal - discount + (items.length > 0 ? delivery : 0)
-  }, [getSubtotal, getDiscount, coupon, items.length])
+    const delivery = DELIVERY_FEE
+    return subtotal + (items.length > 0 ? delivery : 0)
+  }, [getSubtotal, items.length])
 
   const getTotalItems = useCallback(() => {
     return items.reduce((sum, item) => sum + item.quantity, 0)
@@ -177,18 +140,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       value={{
         items,
         isOpen,
-        coupon,
-        deliveryFee: coupon?.discount === 'frete' ? 0 : DELIVERY_FEE,
+        deliveryFee: DELIVERY_FEE,
         addItem,
         removeItem,
         updateQuantity,
         clearCart,
         openCart,
         closeCart,
-        applyCoupon,
-        removeCoupon,
         getSubtotal,
-        getDiscount,
         getTotal,
         getTotalItems,
       }}

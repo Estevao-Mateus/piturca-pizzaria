@@ -131,8 +131,6 @@ export default function LocalizacaoPage() {
           </h2>
           <p className="text-white/90 mb-6 max-w-xl mx-auto">
             Entregamos na sua porta em até 45 minutos! Taxa de entrega: Kz 500,00
-            <br />
-            <span className="text-sm opacity-80">Use o cupom FRETEGRATIS para entrega grátis!</span>
           </p>
           <Link
             href="/cardapio"

@@ -12,34 +12,14 @@ export function CartSidebar() {
     items,
     isOpen,
     closeCart,
-    coupon,
     deliveryFee,
     removeItem,
     updateQuantity,
-    applyCoupon,
-    removeCoupon,
     getSubtotal,
-    getDiscount,
     getTotal,
   } = useCart()
 
-  const [couponInput, setCouponInput] = useState('')
-  const [couponError, setCouponError] = useState('')
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false)
-
-  const handleApplyCoupon = () => {
-    if (!couponInput.trim()) {
-      setCouponError('Digite um código de cupom')
-      return
-    }
-    const success = applyCoupon(couponInput)
-    if (success) {
-      setCouponError('')
-      setCouponInput('')
-    } else {
-      setCouponError('Cupom inválido')
-    }
-  }
 
   const handleCheckout = () => {
     if (items.length === 0) return
@@ -167,56 +147,12 @@ export function CartSidebar() {
         {/* Footer */}
         {items.length > 0 && (
           <div className="border-t bg-gray-50 p-6 space-y-4">
-            {/* Coupon Section */}
-            {!coupon ? (
-              <div className="space-y-2">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={couponInput}
-                    onChange={(e) => setCouponInput(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
-                    placeholder="Cupom de desconto"
-                    className="flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    aria-label="Código de cupom"
-                  />
-                  <button
-                    onClick={handleApplyCoupon}
-                    className="px-4 py-2 bg-gray-100 border rounded-lg text-sm font-semibold hover:bg-primary hover:text-white hover:border-primary transition-colors"
-                  >
-                    Aplicar
-                  </button>
-                </div>
-                {couponError && (
-                  <p className="text-red-500 text-xs">{couponError}</p>
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-                <span className="text-sm text-green-700 font-medium">
-                  ✅ Cupom {coupon.code} aplicado!
-                </span>
-                <button
-                  onClick={removeCoupon}
-                  className="text-sm text-red-500 hover:text-red-700"
-                >
-                  Remover
-                </button>
-              </div>
-            )}
-
             {/* Summary */}
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Subtotal:</span>
                 <span>{formatPrice(getSubtotal())}</span>
               </div>
-              {getDiscount() > 0 && (
-                <div className="flex justify-between text-green-600">
-                  <span>Desconto:</span>
-                  <span>-{formatPrice(getDiscount())}</span>
-                </div>
-              )}
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Taxa de entrega:</span>
                 <span>{formatPrice(deliveryFee)}</span>

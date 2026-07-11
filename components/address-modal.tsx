@@ -11,7 +11,7 @@ interface AddressModalProps {
 }
 
 export function AddressModal({ isOpen, onClose }: AddressModalProps) {
-  const { items, coupon, getSubtotal, getDiscount, deliveryFee, getTotal, clearCart, closeCart } = useCart()
+  const { items, getSubtotal, deliveryFee, getTotal, clearCart, closeCart } = useCart()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -50,20 +50,13 @@ export function AddressModal({ isOpen, onClose }: AddressModalProps) {
     })
 
     const subtotal = getSubtotal()
-    const discount = getDiscount()
     const total = getTotal()
 
     message += `\n*━━━━━━━━━━━━━━━━━━━*\n`
     message += `💰 *RESUMO:*\n`
     message += `Subtotal: Kz ${subtotal.toLocaleString()}\n`
-    if (discount > 0) {
-      message += `Desconto: -Kz ${discount.toLocaleString()}\n`
-    }
     message += `Taxa de Entrega: Kz ${deliveryFee.toLocaleString()}\n`
     message += `*TOTAL: Kz ${total.toLocaleString()}*\n`
-    if (coupon) {
-      message += `\n🎉 Cupom aplicado: ${coupon.code}`
-    }
 
     const whatsappNumber = "244952413568"
     const encodedMessage = encodeURIComponent(message)
