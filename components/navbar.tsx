@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { ShoppingCart, Menu, X } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { ShoppingCart, Menu, X, LogOut, User } from 'lucide-react'
 import { useCart } from '@/context/cart-context'
 import { cn } from '@/lib/utils'
+import { authClient } from '@/lib/auth-client'
+import type { Session } from 'better-auth/types'
 
 const navLinks = [
   { href: '/', label: 'Início' },
@@ -17,9 +19,26 @@ const navLinks = [
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [session, setSession] = useState<Session | null>(null)
+  const [loading, setLoading] = useState(true)
   const pathname = usePathname()
+  const router = useRouter()
   const { openCart, getTotalItems } = useCart()
   const totalItems = getTotalItems()
+
+  useEffect(() => {
+    const getSession = async () => {
+      try {
+        const { data } = await authClient.getSession()
+        setSession(data?.session || null)
+      } catch (error) {
+        console.error('Error fetching session:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    getSession()
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +47,13 @@ export function Navbar() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const handleLogout = async () => {
+    await authClient.signOut()
+    setSession(null)
+    router.push('/')
+    router.refresh()
+  }
 
   useEffect(() => {
     setIsMobileMenuOpen(false)
@@ -80,8 +106,45 @@ export function Navbar() {
           ))}
         </ul>
 
-        {/* Right side: Cart + Mobile Menu */}
-        <div className="flex items-center gap-4">
+        {/* Right side: Auth + Cart + Mobile Menu */}
+        <div className="flex items-center gap-2 md:gap-4">
+          {/* Auth Buttons */}
+          {!loading && (
+            <>
+              {session ? (
+                <>
+                  <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10">
+                    <User className="w-4 h-4 text-white" />
+                    <span className="text-sm text-white/90">{session.user.name || session.user.email}</span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-red-600/20 hover:text-red-400 transition-colors"
+                    title="Sair da conta"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="hidden lg:inline">Sair</span>
+                  </button>
+                </>
+              ) : (
+                <div className="hidden sm:flex items-center gap-2">
+                  <Link
+                    href="/sign-in"
+                    className="px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-white/10 transition-colors"
+                  >
+                    Entrar
+                  </Link>
+                  <Link
+                    href="/sign-up"
+                    className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors"
+                  >
+                    Criar conta
+                  </Link>
+                </div>
+              )}
+            </>
+          )}
+
           {/* Cart Icon */}
           <button
             onClick={openCart}
@@ -115,7 +178,7 @@ export function Navbar() {
         <div
           className={cn(
             'absolute top-full left-0 right-0 bg-[#0d0d0d] md:hidden transition-all duration-300 overflow-hidden',
-            isMobileMenuOpen ? 'max-h-64 shadow-xl' : 'max-h-0'
+            isMobileMenuOpen ? 'max-h-96 shadow-xl' : 'max-h-0'
           )}
         >
           <ul className="flex flex-col p-6 gap-4">
@@ -132,6 +195,42 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
+            
+            {/* Mobile Auth Section */}
+            {!loading && (
+              <li className="pt-4 border-t border-white/10">
+                {session ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 px-2 py-2">
+                      <User className="w-4 h-4 text-primary" />
+                      <span className="text-sm text-white/90">{session.user.name || session.user.email}</span>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-white rounded-lg hover:bg-red-600/20 hover:text-red-400 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sair
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    <Link
+                      href="/sign-in"
+                      className="block px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-white/10 transition-colors text-center"
+                    >
+                      Entrar
+                    </Link>
+                    <Link
+                      href="/sign-up"
+                      className="block px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors text-center"
+                    >
+                      Criar conta
+                    </Link>
+                  </div>
+                )}
+              </li>
+            )}
           </ul>
         </div>
       </nav>
