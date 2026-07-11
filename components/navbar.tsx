@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ShoppingCart, Menu, X, LogOut, User } from 'lucide-react'
@@ -24,18 +24,23 @@ export function Navbar() {
   const pathname = usePathname()
   const { openCart, getTotalItems } = useCart()
   const totalItems = getTotalItems()
+  const sessionRef = useRef<boolean>(false)
 
   useEffect(() => {
+    if (sessionRef.current) return
+    
     const getSession = async () => {
       try {
         const { data } = await authClient.getSession()
         setSession(data?.session || null)
       } catch (error) {
-        console.error('Error fetching session:', error)
+        // Silently fail on session fetch errors
       } finally {
         setLoading(false)
       }
     }
+    
+    sessionRef.current = true
     getSession()
   }, [])
 
@@ -48,9 +53,15 @@ export function Navbar() {
   }, [])
 
   const handleLogout = async () => {
-    await authClient.signOut()
-    setSession(null)
-    window.location.href = '/'
+    try {
+      await authClient.signOut()
+      setSession(null)
+      setIsMobileMenuOpen(false)
+      // Reload page to clear all client state
+      window.location.reload()
+    } catch (error) {
+      // Silently handle logout errors
+    }
   }
 
   useEffect(() => {

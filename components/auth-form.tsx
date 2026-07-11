@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { authClient } from '@/lib/auth-client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,11 +11,13 @@ import { Card } from '@/components/ui/card'
 import { AlertCircle, CheckCircle2 } from 'lucide-react'
 
 export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
+  const router = useRouter()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const routerRef = useRef<boolean>(false)
 
   const isSignUp = mode === 'sign-up'
 
@@ -34,7 +37,12 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
       return
     }
 
-    window.location.href = '/'
+    // Use a ref to prevent duplicate navigation
+    if (!routerRef.current) {
+      routerRef.current = true
+      router.push('/')
+      router.refresh()
+    }
   }
 
   return (
