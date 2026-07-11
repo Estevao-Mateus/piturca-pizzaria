@@ -29,7 +29,7 @@ export default function CardapioPage() {
       <section className="max-w-4xl mx-auto px-6 mb-12">
         <div className="bg-gradient-to-r from-[#0d0d0d] to-[#1a1a1a] rounded-2xl p-6 md:p-8">
           <h2 className="font-display text-xl md:text-2xl font-bold text-white text-center mb-6">
-            Tamanhos e Precos
+            Tamanhos e Preços
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {pizzaSizes.map((size) => (
