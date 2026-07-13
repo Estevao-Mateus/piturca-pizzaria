@@ -38,8 +38,10 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
 
     if (!routerRef.current) {
       routerRef.current = true
-      router.push('/')
-      router.refresh()
+      // Wait a moment for the session to be established
+      await new Promise(resolve => setTimeout(resolve, 800))
+      // Use window.location to do a full page reload so navbar picks up the session
+      window.location.href = '/'
     }
   }
 
