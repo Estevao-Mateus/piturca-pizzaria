@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { ArrowRight, Pizza, Zap, UtensilsCrossed, Star } from 'lucide-react'
 import { products } from '@/lib/products'
 import { ProductCard } from '@/components/product-card'
+import { ScrollAnimation, ScrollAnimationGroup, ScrollAnimationItem } from '@/components/scroll-animations'
 
 const highlights = [
   {
@@ -88,63 +89,71 @@ export default function HomePage() {
       {/* Highlights Section */}
       <section className="py-16 bg-gradient-to-b from-orange-50/50 to-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {highlights.map((item, index) => (
-              <div
-                key={item.title}
-                className="group bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <item.icon className="w-8 h-8 text-primary" />
-                </div>
-                <h3 className="font-display text-lg font-bold mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
-              </div>
-            ))}
-          </div>
+          <ScrollAnimationGroup staggerDelay={0.15}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {highlights.map((item) => (
+                <ScrollAnimationItem key={item.title} variant="fadeInUp">
+                  <div className="group bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center h-full">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <item.icon className="w-8 h-8 text-primary" />
+                    </div>
+                    <h3 className="font-display text-lg font-bold mb-2">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                  </div>
+                </ScrollAnimationItem>
+              ))}
+            </div>
+          </ScrollAnimationGroup>
         </div>
       </section>
 
       {/* About Preview Section */}
       <section className="py-20 bg-[#f7f4ef]">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-black mb-4">
-            Sobre <span className="text-primary">Nós</span>
-          </h2>
-          <div className="w-16 h-1 bg-gradient-to-r from-primary to-[#e8c46a] rounded-full mx-auto mb-8" />
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            Na nossa pizzaria, cada pizza é feita com paixão e dedicação, utilizando apenas os melhores
-            ingredientes para garantir um sabor inigualável. As nossas receitas são cuidadosamente elaboradas
-            para oferecer uma experiência gastronómica única, combinando tradição e inovação em cada fatia.
-            Venha experimentar o verdadeiro sabor da pizza connosco!
-          </p>
-          <Link
-            href="/sobre"
-            className="inline-flex items-center gap-2 mt-8 text-primary font-semibold hover:gap-3 transition-all"
-          >
-            Saber mais sobre nós
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+        <ScrollAnimation variant="fadeInUp">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <h2 className="font-display text-3xl md:text-4xl font-black mb-4">
+              Sobre <span className="text-primary">Nós</span>
+            </h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-primary to-[#e8c46a] rounded-full mx-auto mb-8" />
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Na nossa pizzaria, cada pizza é feita com paixão e dedicação, utilizando apenas os melhores
+              ingredientes para garantir um sabor inigualável. As nossas receitas são cuidadosamente elaboradas
+              para oferecer uma experiência gastronómica única, combinando tradição e inovação em cada fatia.
+              Venha experimentar o verdadeiro sabor da pizza connosco!
+            </p>
+            <Link
+              href="/sobre"
+              className="inline-flex items-center gap-2 mt-8 text-primary font-semibold hover:gap-3 transition-all"
+            >
+              Saber mais sobre nós
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </ScrollAnimation>
       </section>
 
       {/* Featured Products Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="font-display text-3xl md:text-4xl font-black mb-4">
-              Nosso <span className="text-primary">Cardápio</span>
-            </h2>
-            <div className="w-16 h-1 bg-gradient-to-r from-primary to-[#e8c46a] rounded-full mx-auto mb-4" />
-            <p className="text-muted-foreground">As pizzas mais pedidas pelos nossos clientes</p>
-          </div>
+          <ScrollAnimation variant="fadeInUp">
+            <div className="text-center mb-12">
+              <h2 className="font-display text-3xl md:text-4xl font-black mb-4">
+                Nosso <span className="text-primary">Cardápio</span>
+              </h2>
+              <div className="w-16 h-1 bg-gradient-to-r from-primary to-[#e8c46a] rounded-full mx-auto mb-4" />
+              <p className="text-muted-foreground">As pizzas mais pedidas pelos nossos clientes</p>
+            </div>
+          </ScrollAnimation>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} />
-            ))}
-          </div>
+          <ScrollAnimationGroup staggerDelay={0.1}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredProducts.map((product) => (
+                <ScrollAnimationItem key={product.id} variant="scaleIn">
+                  <ProductCard product={product} index={0} />
+                </ScrollAnimationItem>
+              ))}
+            </div>
+          </ScrollAnimationGroup>
 
           <div className="text-center mt-12">
             <Link
@@ -160,20 +169,22 @@ export default function HomePage() {
 
       {/* CTA Section */}
       <section className="py-20 bg-[#0d0d0d] text-white">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-black mb-4">
-            Pronto para experimentar?
-          </h2>
-          <p className="text-lg text-white/70 mb-8">
-            Faça já o seu pedido e receba a sua pizza quentinha em casa!
-          </p>
-          <Link
-            href="/cardapio"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#25D366] text-white rounded-lg font-semibold text-lg hover:bg-[#1aad54] transition-all shadow-lg shadow-[#25D366]/30"
-          >
-            Pedir Agora via WhatsApp
-          </Link>
-        </div>
+        <ScrollAnimation variant="fadeInUp">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <h2 className="font-display text-3xl md:text-4xl font-black mb-4">
+              Pronto para experimentar?
+            </h2>
+            <p className="text-lg text-white/70 mb-8">
+              Faça já o seu pedido e receba a sua pizza quentinha em casa!
+            </p>
+            <Link
+              href="/cardapio"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#25D366] text-white rounded-lg font-semibold text-lg hover:bg-[#1aad54] transition-all shadow-lg shadow-[#25D366]/30"
+            >
+              Pedir Agora via WhatsApp
+            </Link>
+          </div>
+        </ScrollAnimation>
       </section>
     </>
   )
