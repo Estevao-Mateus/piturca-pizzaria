@@ -64,11 +64,11 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
   return (
     <article
-      className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+      className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl h-full"
       style={{ animationDelay: `${index * 60}ms` }}
     >
       {/* Image Container */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-48 overflow-hidden flex-shrink-0">
         <Image
           src={product.image}
           alt={product.name}

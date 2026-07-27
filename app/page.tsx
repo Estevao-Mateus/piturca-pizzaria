@@ -175,7 +175,7 @@ export default function HomePage() {
           </ScrollAnimation>
 
           <ScrollAnimationGroup staggerDelay={0.1}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-fr">
               {featuredProducts.map((product) => (
                 <ScrollAnimationItem key={product.id} variant="scaleIn">
                   <ProductCard product={product} index={0} />
