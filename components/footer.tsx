@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Phone, Mail, Clock } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, Lock } from 'lucide-react'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -79,6 +79,21 @@ export function Footer() {
                 <p>09:00 às 22:00</p>
               </div>
             </div>
+          </div>
+
+          {/* Admin Portal - Discrete and Professional */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-lg">Gestão</h4>
+            <Link 
+              href="/admin/login" 
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-primary/50 hover:bg-primary/5 transition-all group"
+            >
+              <Lock className="w-4 h-4 text-white/60 group-hover:text-primary transition-colors" />
+              <span className="text-white/70 group-hover:text-primary text-sm font-medium transition-colors">
+                Acesso Admin
+              </span>
+            </Link>
+            <p className="text-white/50 text-xs">Portal de administração seguro</p>
           </div>
         </div>
       </div>
