@@ -1,30 +1,46 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, Pizza, Zap, UtensilsCrossed, Star } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { products } from '@/lib/products'
 import { ProductCard } from '@/components/product-card'
 import { ScrollAnimation, ScrollAnimationGroup, ScrollAnimationItem } from '@/components/scroll-animations'
 
 const highlights = [
   {
-    icon: Pizza,
     title: 'Massa de 48h',
     description: 'Fermentação natural e leve.',
+    icon: (
+      <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9H13V7.5h-2V11H8.5v2h2.5v3.5h2V13h2.5v-2z" fill="currentColor"/>
+      </svg>
+    ),
   },
   {
-    icon: Zap,
     title: 'Entrega Rápida',
     description: 'Em até 45 minutos.',
+    icon: (
+      <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 8h-1V6c0-.82-.65-1.5-1.5-1.5H8.5C7.65 4.5 7 5.18 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-7 10.5c-2.49 0-4.5-2.01-4.5-4.5s2.01-4.5 4.5-4.5 4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zM9 6h6v2H9V6z" fill="currentColor"/>
+      </svg>
+    ),
   },
   {
-    icon: UtensilsCrossed,
     title: 'Ingredientes Premium',
     description: 'Qualidade Angolana.',
+    icon: (
+      <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
+      </svg>
+    ),
   },
   {
-    icon: Star,
     title: 'Nota 4.98',
     description: 'Mais de 12 mil avaliações.',
+    icon: (
+      <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2l-2.81 6.63L2 9.24l5.46 4.73L5.82 21 12 17.27z" fill="currentColor"/>
+      </svg>
+    ),
   },
 ]
 
@@ -87,18 +103,31 @@ export default function HomePage() {
       </section>
 
       {/* Highlights Section */}
-      <section className="py-16 bg-gradient-to-b from-orange-50/50 to-white">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <ScrollAnimationGroup staggerDelay={0.15}>
+          <ScrollAnimationGroup staggerDelay={0.12}>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {highlights.map((item) => (
                 <ScrollAnimationItem key={item.title} variant="fadeInUp">
-                  <div className="group bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center h-full">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <item.icon className="w-8 h-8 text-primary" />
+                  <div className="group relative bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 border border-gray-200/60 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center h-full overflow-hidden">
+                    {/* Gradient accent on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    
+                    {/* Icon container with premium styling */}
+                    <div className="relative mb-6">
+                      <div className="w-14 h-14 mx-auto bg-gradient-to-br from-primary/15 to-primary/5 rounded-xl flex items-center justify-center group-hover:from-primary/25 group-hover:to-primary/10 transition-all duration-300 text-primary group-hover:scale-110">
+                        {item.icon}
+                      </div>
                     </div>
-                    <h3 className="font-display text-lg font-bold mb-2">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                    
+                    {/* Content */}
+                    <div className="relative">
+                      <h3 className="font-display text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{item.title}</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
+                    </div>
+                    
+                    {/* Bottom accent line */}
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/0 via-primary to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 </ScrollAnimationItem>
               ))}
